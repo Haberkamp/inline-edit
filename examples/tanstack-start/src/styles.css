@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+body {
+  @apply m-0;
+  font-family:
+    "IBM Plex Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Editable Component Styles */
+.editable-root {
+  @apply w-full;
+}
+
+.editable-root[data-disabled] {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.editable-area {
+  @apply relative;
+}
+
+.editable-area[data-focused] {
+  @apply ring-2 ring-amber-500/30 ring-offset-2 ring-offset-stone-900 rounded;
+}
+
+.editable-preview {
+  @apply text-lg text-stone-100 cursor-pointer px-2 py-1 -mx-2 rounded hover:bg-stone-800/50 transition-colors inline-block min-w-[1em];
+}
+
+.editable-preview[data-placeholder-shown] {
+  @apply text-stone-500 italic;
+}
+
+.editable-input {
+  @apply w-full text-lg text-stone-100 bg-transparent border-none outline-none px-2 py-1 -mx-2;
+}
+
+.editable-input::placeholder {
+  @apply text-stone-600 italic;
+}
+
+.editable-input:focus {
+  @apply outline-none;
+}
+
+/* Trigger Buttons */
+.trigger-btn {
+  @apply p-2 rounded bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-stone-100 transition-colors;
+}
+
+.trigger-submit {
+  @apply hover:bg-emerald-900/50 hover:text-emerald-400;
+}
+
+.trigger-cancel {
+  @apply hover:bg-red-900/50 hover:text-red-400;
+}
