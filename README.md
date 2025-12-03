@@ -2,7 +2,8 @@
 
 <!-- ![CI passing](https://github.com/Haberkamp/editable/actions/workflows/ci.yml/badge.svg?event=push&branch=main) -->
 ![Created by](https://img.shields.io/badge/created%20by-@n__haberkamp-065afa.svg)
-![NPM License](https://img.shields.io/npm/l/%40editable%2Freact)
+![NPM License](https://img.shields.io/npm/l/%40inline-edit%2Freact)
+[![Changelog](https://img.shields.io/badge/changelog-blue)](./CHANGELOG.md)
 
 ## Highlights
 
