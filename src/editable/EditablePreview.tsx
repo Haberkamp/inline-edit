@@ -20,14 +20,14 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
 
     const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
       if (ctx.activationMode === "focus" && !ctx.disabled && !ctx.readOnly) {
-        ctx.edit();
+        ctx.edit("click");
       }
       onClick?.(e);
     };
 
     const handleDoubleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
       if (ctx.activationMode === "dblclick" && !ctx.disabled && !ctx.readOnly) {
-        ctx.edit();
+        ctx.edit("dblclick");
       }
       onDoubleClick?.(e);
     };
@@ -36,7 +36,7 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
       if (ctx.disabled || ctx.readOnly) return;
       if (e.key === "Enter" || e.key === " ") {
         if (ctx.activationMode === "focus" || ctx.activationMode === "dblclick") {
-          ctx.edit();
+          ctx.edit("trigger"); // keyboard activation = select all
           e.preventDefault();
         }
       }

@@ -9,6 +9,9 @@ export type SubmitMode = "blur" | "enter" | "none" | "both";
 /** State transitions emitted via onStateChange. */
 export type EditableState = "edit" | "submit" | "cancel";
 
+/** How edit mode was activated - determines text selection behavior. */
+export type ActivationSource = "click" | "dblclick" | "trigger";
+
 /** Placeholder can be a string or separate values for edit and preview modes. */
 export type Placeholder = string | { edit: string; preview: string };
 
@@ -68,8 +71,9 @@ export interface UseEditableReturn {
   name: string | undefined;
   required: boolean;
   // Actions
-  edit: () => void;
+  edit: (source?: ActivationSource) => void;
   cancel: () => void;
+  activationSource: ActivationSource | null;
   submit: () => void;
   setInputValue: (value: string) => void;
   // Refs for outside-click/focus logic
@@ -112,18 +116,25 @@ export function useEditable(options: UseEditableOptions = {}): UseEditableReturn
   // Value before editing started - for cancel
   const previousValueRef = useRef<string | null>(value);
 
+  // Track how edit mode was activated for selection behavior
+  const activationSourceRef = useRef<ActivationSource | null>(null);
+
   const isEmpty = useMemo(() => {
     const displayValue = isEditing ? inputValue : value;
     return displayValue === null || displayValue === "";
   }, [isEditing, inputValue, value]);
 
-  const edit = useCallback(() => {
-    if (disabled || readOnly) return;
-    previousValueRef.current = value;
-    setInputValueInternal(value ?? "");
-    setIsEditing(true);
-    onStateChange?.("edit");
-  }, [disabled, readOnly, value, onStateChange]);
+  const edit = useCallback(
+    (source: ActivationSource = "trigger") => {
+      if (disabled || readOnly) return;
+      previousValueRef.current = value;
+      activationSourceRef.current = source;
+      setInputValueInternal(value ?? "");
+      setIsEditing(true);
+      onStateChange?.("edit");
+    },
+    [disabled, readOnly, value, onStateChange],
+  );
 
   const cancel = useCallback(() => {
     setInputValueInternal(previousValueRef.current ?? "");
@@ -175,6 +186,7 @@ export function useEditable(options: UseEditableOptions = {}): UseEditableReturn
     cancel,
     submit,
     setInputValue,
+    activationSource: activationSourceRef.current,
     // Refs
     rootRef,
     inputRef,

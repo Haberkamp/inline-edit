@@ -5,3 +5,13 @@ export * from "./editable/EditablePreview.js";
 export * from "./editable/EditableEditTrigger.js";
 export * from "./editable/EditableSubmitTrigger.js";
 export * from "./editable/EditableCancelTrigger.js";
+export type {
+  ActivationMode,
+  ActivationSource,
+  SubmitMode,
+  EditableState,
+  Placeholder,
+  UseEditableOptions,
+  UseEditableReturn,
+} from "./editable/useEditable.js";
+export { useEditable } from "./editable/useEditable.js";

@@ -1,5 +1,14 @@
 # @inline-edit/react
 
+## 0.1.4
+
+### Patch Changes
+
+- Fix text selection behavior based on activation method:
+  - Single click: cursor at end
+  - Double click: select all
+  - Edit trigger: select all
+
 ## 0.1.3
 
 ### Minor Changes

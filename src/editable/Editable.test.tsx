@@ -755,6 +755,47 @@ describe("Editable", () => {
     });
   });
 
+  describe("Text selection behavior", () => {
+    it("single click: cursor at end, no selection", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Hello World" activationMode="focus" />);
+
+      // Act - single click
+      await page.getByTestId("preview").click();
+
+      // Assert - cursor at end, nothing selected
+      const input = page.getByTestId("input").element() as HTMLInputElement;
+      expect(input.selectionStart).toBe(input.value.length);
+      expect(input.selectionEnd).toBe(input.value.length);
+    });
+
+    it("double click: select all text", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Hello World" activationMode="dblclick" />);
+
+      // Act - double click
+      await page.getByTestId("preview").click({ clickCount: 2 });
+
+      // Assert - all text selected
+      const input = page.getByTestId("input").element() as HTMLInputElement;
+      expect(input.selectionStart).toBe(0);
+      expect(input.selectionEnd).toBe(input.value.length);
+    });
+
+    it("edit trigger: select all text", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Hello World" activationMode="none" />);
+
+      // Act - click edit trigger
+      await page.getByTestId("edit-trigger").click();
+
+      // Assert - all text selected
+      const input = page.getByTestId("input").element() as HTMLInputElement;
+      expect(input.selectionStart).toBe(0);
+      expect(input.selectionEnd).toBe(input.value.length);
+    });
+  });
+
   describe("Render prop", () => {
     it("passes state to render function", async () => {
       // Arrange
