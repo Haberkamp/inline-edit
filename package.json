@@ -21,7 +21,7 @@
     "typecheck": "tsc --noEmit",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "test:browser": "vitest",
+    "test": "vitest",
     "lint": "oxlint --type-aware"
   },
   "keywords": [],
