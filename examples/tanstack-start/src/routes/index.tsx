@@ -23,7 +23,9 @@ function App() {
       <div className="pt-16" />
       <div className="max-w-4xl mx-auto py-16">
         <header className="mb-16">
-          <h1 className="text-5xl font-light tracking-tight text-stone-50 mb-4">@inline-edit/react</h1>
+          <h1 className="text-5xl font-light tracking-tight text-stone-50 mb-4">
+            @inline-edit/react
+          </h1>
           <p className="text-xl text-stone-400 max-w-2xl">
             Headless, composable editable text components for React. Full keyboard support,
             accessible, and infinitely customizable.
