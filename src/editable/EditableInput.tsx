@@ -23,12 +23,23 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         const input = ctx.inputRef.current;
         if (input) {
           input.focus({ preventScroll: true });
-          if (ctx.selectOnFocus) {
+          // Selection behavior based on activation source:
+          // - click: cursor at end
+          // - dblclick/trigger: select all
+          const shouldSelectAll =
+            ctx.selectOnFocus ||
+            ctx.activationSource === "dblclick" ||
+            ctx.activationSource === "trigger";
+          if (shouldSelectAll) {
             input.select();
+          } else {
+            // Move cursor to end
+            const len = input.value.length;
+            input.setSelectionRange(len, len);
           }
         }
       }
-    }, [ctx.isEditing, ctx.selectOnFocus, ctx.inputRef]);
+    }, [ctx.isEditing, ctx.selectOnFocus, ctx.activationSource, ctx.inputRef]);
 
     // Auto-resize
     useLayoutEffect(() => {
@@ -60,10 +71,7 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         onChange={(e) => ctx.setInputValue(e.target.value)}
         onFocus={(e) => {
           if (ctx.activationMode === "focus" && !ctx.isEditing) {
-            ctx.edit();
-          }
-          if (ctx.selectOnFocus && ctx.isEditing) {
-            e.currentTarget.select();
+            ctx.edit("click");
           }
           onFocus?.(e);
         }}
@@ -85,7 +93,7 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         }}
         onDoubleClick={() => {
           if (ctx.activationMode === "dblclick" && !ctx.isEditing) {
-            ctx.edit();
+            ctx.edit("dblclick");
           }
         }}
         {...props}
