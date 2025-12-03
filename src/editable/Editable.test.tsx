@@ -102,8 +102,8 @@ describe("Editable", () => {
       // Arrange
       await render(<BasicEditable defaultValue="Test" />);
 
-      // Act
-      await page.getByTestId("input").click();
+      // Act - click preview (input is hidden when not editing)
+      await page.getByTestId("preview").click();
 
       // Assert - submit trigger visible when editing
       await expect.element(page.getByTestId("submit-trigger")).toBeVisible();
@@ -152,8 +152,8 @@ describe("Editable", () => {
       // Assert - not editing initially
       await expect.element(page.getByTestId("submit-trigger")).not.toBeVisible();
 
-      // Act - double click
-      await page.getByTestId("input").click({ clickCount: 2 });
+      // Act - double click preview (input is hidden when not editing)
+      await page.getByTestId("preview").click({ clickCount: 2 });
 
       // Assert
       await expect.element(page.getByTestId("submit-trigger")).toBeVisible();
@@ -225,7 +225,7 @@ describe("Editable", () => {
       );
 
       // Act
-      await page.getByTestId("input").click(); // enter edit
+      await page.getByTestId("preview").click(); // enter edit (input is hidden when not editing)
       await page.getByTestId("input").fill("New Value");
       await page.getByTestId("outside").click(); // click outside
 
@@ -368,7 +368,7 @@ describe("Editable", () => {
       await render(<BasicEditable defaultValue="Test" submitMode="enter" onSubmit={onSubmit} />);
 
       // Act
-      await page.getByTestId("input").click();
+      await page.getByTestId("preview").click(); // enter edit (input is hidden when not editing)
       await page.getByTestId("input").fill("Entered");
       await userEvent.keyboard("{Enter}");
 
@@ -406,7 +406,7 @@ describe("Editable", () => {
       await render(<BasicEditable defaultValue="Test" submitMode="both" onSubmit={onSubmit} />);
 
       // Act - test Enter
-      await page.getByTestId("input").click();
+      await page.getByTestId("preview").click(); // enter edit (input is hidden when not editing)
       await page.getByTestId("input").fill("Via Enter");
       await userEvent.keyboard("{Enter}");
 
@@ -422,7 +422,7 @@ describe("Editable", () => {
       );
 
       // Act
-      await page.getByTestId("input").click();
+      await page.getByTestId("preview").click(); // enter edit (input is hidden when not editing)
       await page.getByTestId("input").fill("Changed");
       await userEvent.keyboard("{Escape}");
 
@@ -437,8 +437,8 @@ describe("Editable", () => {
       // Arrange
       await render(<FocusEditable defaultValue="Original" submitMode="enter" />);
 
-      // Act - enter edit mode via input focus
-      await page.getByTestId("input").click();
+      // Act - enter edit mode via preview click (input is hidden when not editing)
+      await page.getByTestId("preview").click();
       await page.getByTestId("input").fill("Changed");
 
       // Assert - area marked as focused while editing
@@ -464,8 +464,8 @@ describe("Editable", () => {
         </div>,
       );
 
-      // Act - enter edit mode and change value
-      await page.getByTestId("input").click();
+      // Act - enter edit mode via preview click (input is hidden when not editing)
+      await page.getByTestId("preview").click();
       await page.getByTestId("input").fill("Changed");
 
       // Area focused while editing
@@ -489,8 +489,8 @@ describe("Editable", () => {
         </div>,
       );
 
-      // Act - enter edit mode and change value
-      await page.getByTestId("input").click();
+      // Act - enter edit mode via preview click (input is hidden when not editing)
+      await page.getByTestId("preview").click();
       await page.getByTestId("input").fill("Changed");
 
       // Area focused while editing
@@ -671,6 +671,51 @@ describe("Editable", () => {
 
       // Assert
       expect(onSubmit).toHaveBeenCalledWith("Submitted");
+    });
+  });
+
+  describe("Input visibility", () => {
+    it("hides input when not editing", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Test" activationMode="none" />);
+
+      // Assert - input should be hidden when not editing
+      await expect.element(page.getByTestId("input")).toHaveAttribute("hidden");
+    });
+
+    it("shows input when editing", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Test" activationMode="none" />);
+
+      // Act - enter edit mode
+      await page.getByTestId("edit-trigger").click();
+
+      // Assert - input should be visible when editing
+      await expect.element(page.getByTestId("input")).not.toHaveAttribute("hidden");
+    });
+
+    it("uses visibility:hidden instead of hidden attribute when autoResize is true", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Test" activationMode="none" autoResize />);
+
+      // Assert - should NOT use hidden attribute (for layout purposes)
+      await expect.element(page.getByTestId("input")).not.toHaveAttribute("hidden");
+      // Should use visibility:hidden style instead
+      const input = page.getByTestId("input").element();
+      expect(input.style.visibility).toBe("hidden");
+    });
+
+    it("shows input normally when autoResize and editing", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Test" activationMode="none" autoResize />);
+
+      // Act - enter edit mode
+      await page.getByTestId("edit-trigger").click();
+
+      // Assert - input should be visible (no hidden attribute, visibility not hidden)
+      await expect.element(page.getByTestId("input")).not.toHaveAttribute("hidden");
+      const input = page.getByTestId("input").element();
+      expect(input.style.visibility).not.toBe("hidden");
     });
   });
 
