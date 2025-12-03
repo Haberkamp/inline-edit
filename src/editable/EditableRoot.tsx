@@ -79,26 +79,52 @@ export const EditableRoot = forwardRef<HTMLDivElement, EditableRootProps>(functi
     required,
   });
 
-  // Wire outside click/blur similar to Vue's handleDismiss:
-  // - if submitMode is 'blur' or 'both' → submit()
-  // - otherwise → cancel()
+  // Handle dismiss (outside click or focus)
+  const handleDismiss = () => {
+    if (editable.submitMode === "blur" || editable.submitMode === "both") {
+      editable.submit();
+    } else {
+      editable.cancel();
+    }
+  };
+
+  // Wire outside pointer down
   useEffect(() => {
     if (!editable.isEditing) return;
     const handlePointerDown = (e: PointerEvent) => {
       const root = editable.rootRef.current;
       if (!root) return;
       if (!root.contains(e.target as Node)) {
-        if (editable.submitMode === "blur" || editable.submitMode === "both") {
-          editable.submit();
-        } else {
-          editable.cancel();
-        }
+        handleDismiss();
       }
     };
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally picking stable values
-  }, [editable.isEditing, editable.submitMode, editable.submit, editable.rootRef]);
+  }, [editable.isEditing, editable.submitMode, editable.submit, editable.cancel, editable.rootRef]);
+
+  // Wire focus outside (keyboard blur via Tab)
+  // Note: Only handle when relatedTarget is set and outside root.
+  // When relatedTarget is null (click on non-focusable element, or Safari clicking buttons),
+  // the pointerdown handler will deal with it instead.
+  useEffect(() => {
+    if (!editable.isEditing) return;
+    const root = editable.rootRef.current;
+    if (!root) return;
+
+    const handleFocusOut = (e: FocusEvent) => {
+      const relatedTarget = e.relatedTarget as Node | null;
+      // Only handle keyboard navigation (Tab) where relatedTarget is always set.
+      // If relatedTarget is null, it's likely a click event - let pointerdown handle it.
+      if (relatedTarget && !root.contains(relatedTarget)) {
+        handleDismiss();
+      }
+    };
+
+    root.addEventListener("focusout", handleFocusOut);
+    return () => root.removeEventListener("focusout", handleFocusOut);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally picking stable values
+  }, [editable.isEditing, editable.submitMode, editable.submit, editable.cancel, editable.rootRef]);
 
   const renderProps: EditableRenderProps = {
     value: editable.value,

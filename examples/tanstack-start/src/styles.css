@@ -21,6 +21,16 @@ body {
   @apply opacity-50 cursor-not-allowed;
 }
 
+
+.editable-root[data-disabled] .editable-preview,
+.editable-root[data-readonly] .editable-preview {
+  @apply cursor-default hover:bg-transparent;
+}
+
+.editable-root[data-disabled] .editable-preview {
+  @apply cursor-not-allowed;
+}
+
 .editable-area {
   @apply relative;
 }
