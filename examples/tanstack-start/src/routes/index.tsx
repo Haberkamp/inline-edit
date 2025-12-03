@@ -45,12 +45,10 @@ function App() {
                 submitMode="both"
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               <p className="text-sm text-stone-500 mt-4">
                 Click to edit · Press Enter or click outside to save · Escape to cancel
@@ -73,8 +71,8 @@ function App() {
                 {({ isEditing }) => (
                   <div className="flex items-center gap-3">
                     <EditableArea className="editable-area flex-1">
-                      {!isEditing && <EditablePreview className="editable-preview" />}
-                      {isEditing && <EditableInput className="editable-input" />}
+                      <EditablePreview className="editable-preview" />
+                      <EditableInput className="editable-input" />
                     </EditableArea>
                     {!isEditing && (
                       <EditableEditTrigger className="trigger-btn">
@@ -111,12 +109,10 @@ function App() {
                 submitMode="both"
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               <p className="text-sm text-stone-500 mt-4">
                 Shows different placeholders for edit and preview modes
@@ -136,12 +132,10 @@ function App() {
                 submitMode="both"
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               <div className="mt-4 flex gap-2">
                 <button
@@ -169,12 +163,10 @@ function App() {
                 submitMode="both"
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               <p className="text-sm text-stone-500 mt-4">
                 activationMode="dblclick" · Double-click to enter edit mode
@@ -194,12 +186,10 @@ function App() {
                 onSubmit={(v) => setSubmittedValues((prev) => [...prev, v ?? ""])}
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               {submittedValues.length > 0 && (
                 <div className="mt-4 text-sm">
@@ -224,23 +214,19 @@ function App() {
             <div className="bg-stone-900 border border-stone-800 rounded-lg p-8 space-y-6">
               <div>
                 <EditableRoot defaultValue="I'm disabled" disabled className="editable-root">
-                  {({ isEditing }) => (
-                    <EditableArea className="editable-area">
-                      {!isEditing && <EditablePreview className="editable-preview" />}
-                      {isEditing && <EditableInput className="editable-input" />}
-                    </EditableArea>
-                  )}
+                  <EditableArea className="editable-area">
+                    <EditablePreview className="editable-preview" />
+                    <EditableInput className="editable-input" />
+                  </EditableArea>
                 </EditableRoot>
                 <p className="text-sm text-stone-500 mt-2">disabled=true</p>
               </div>
               <div>
                 <EditableRoot defaultValue="I'm read-only" readOnly className="editable-root">
-                  {({ isEditing }) => (
-                    <EditableArea className="editable-area">
-                      {!isEditing && <EditablePreview className="editable-preview" />}
-                      {isEditing && <EditableInput className="editable-input" />}
-                    </EditableArea>
-                  )}
+                  <EditableArea className="editable-area">
+                    <EditablePreview className="editable-preview" />
+                    <EditableInput className="editable-input" />
+                  </EditableArea>
                 </EditableRoot>
                 <p className="text-sm text-stone-500 mt-2">readOnly=true</p>
               </div>
@@ -259,12 +245,10 @@ function App() {
                 submitMode="both"
                 className="editable-root"
               >
-                {({ isEditing }) => (
-                  <EditableArea className="editable-area">
-                    {!isEditing && <EditablePreview className="editable-preview" />}
-                    {isEditing && <EditableInput className="editable-input" />}
-                  </EditableArea>
-                )}
+                <EditableArea className="editable-area">
+                  <EditablePreview className="editable-preview" />
+                  <EditableInput className="editable-input" />
+                </EditableArea>
               </EditableRoot>
               <p className="text-sm text-stone-500 mt-4">
                 maxLength=20 · Try typing more than 20 characters

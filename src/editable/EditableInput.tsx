@@ -56,6 +56,8 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         disabled={ctx.disabled}
         readOnly={ctx.readOnly}
         maxLength={ctx.maxLength}
+        hidden={ctx.autoResize ? undefined : !ctx.isEditing || undefined}
+        style={ctx.autoResize ? { visibility: ctx.isEditing ? undefined : "hidden" } : undefined}
         data-disabled={ctx.disabled ? "" : undefined}
         data-readonly={ctx.readOnly ? "" : undefined}
         onChange={(e) => ctx.setInputValue(e.target.value)}
