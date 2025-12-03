@@ -1,4 +1,4 @@
-# @editable/react
+# @inline-edit/react
 
 <!-- ![CI passing](https://github.com/Haberkamp/editable/actions/workflows/ci.yml/badge.svg?event=push&branch=main) -->
 ![Created by](https://img.shields.io/badge/created%20by-@n__haberkamp-065afa.svg)
@@ -25,7 +25,7 @@ Hey, I'm Nils. In my spare time [I write about things I learned](https://www.hab
 You can install this package with any package manager you like.
 
 ```bash
-pnpm install @editable/react
+pnpm install @inline-edit/react
 ```
 
 ## Usage
@@ -38,7 +38,7 @@ You need a few components to get started:
 - `EditableInput`
 
 ```tsx
-import { EditableRoot, EditableArea, EditablePreview, EditableInput } from "@editable/react";
+import { EditableRoot, EditableArea, EditablePreview, EditableInput } from "@inline-edit/react";
 
 <EditableRoot defaultValue="Click to edit">
   <EditableArea>

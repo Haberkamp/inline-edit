@@ -63,7 +63,7 @@ importers:
 
   examples/tanstack-start:
     dependencies:
-      '@editable/react':
+      '@inline-edit/react':
         specifier: workspace:*
         version: link:../..
       '@tailwindcss/vite':

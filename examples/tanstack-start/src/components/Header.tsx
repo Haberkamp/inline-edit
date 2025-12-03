@@ -5,7 +5,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 py-4 bg-stone-950/80 backdrop-blur-sm border-b border-stone-800/50">
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-6">
         <Link to="/" className="text-stone-100 font-medium hover:text-amber-500 transition-colors">
-          @editable/react
+          @inline-edit/react
         </Link>
         <nav className="flex items-center gap-4 text-sm">
           <a
