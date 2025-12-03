@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useLayoutEffect, useRef, type InputHTMLAttributes } from "react";
+import { forwardRef, useEffect, useLayoutEffect, type InputHTMLAttributes } from "react";
 import { useEditableContext } from "./EditableContext.js";
 
 /**
@@ -13,25 +13,22 @@ export interface EditableInputProps extends Omit<
 export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
   function EditableInput({ onFocus, onBlur, onKeyDown, ...props }, ref) {
     const ctx = useEditableContext();
-    const didAutoFocusRef = useRef(false);
 
     const placeholder =
       typeof ctx.placeholder === "string" ? ctx.placeholder : ctx.placeholder?.edit;
 
-    // Auto-focus when startWithEditMode and first render
+    // Auto-focus when entering edit mode
     useEffect(() => {
-      if (ctx.isEditing && !didAutoFocusRef.current) {
-        didAutoFocusRef.current = true;
+      if (ctx.isEditing) {
         const input = ctx.inputRef.current;
         if (input) {
-          input.focus();
+          input.focus({ preventScroll: true });
           if (ctx.selectOnFocus) {
             input.select();
           }
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- only on mount
-    }, []);
+    }, [ctx.isEditing, ctx.selectOnFocus, ctx.inputRef]);
 
     // Auto-resize
     useLayoutEffect(() => {

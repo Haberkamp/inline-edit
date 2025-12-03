@@ -86,6 +86,18 @@ describe("Editable", () => {
   });
 
   describe("Edit lifecycle", () => {
+    it("focuses input when entering edit mode", async () => {
+      // Arrange
+      await render(<BasicEditable defaultValue="Test" activationMode="none" />);
+
+      // Act - enter edit mode via trigger
+      await page.getByTestId("edit-trigger").click();
+
+      // Assert - input should be focused
+      const input = page.getByTestId("input").element();
+      expect(document.activeElement).toBe(input);
+    });
+
     it("enters edit mode on focus (default activationMode)", async () => {
       // Arrange
       await render(<BasicEditable defaultValue="Test" />);
