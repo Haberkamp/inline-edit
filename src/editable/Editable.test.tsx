@@ -777,6 +777,88 @@ describe("Editable", () => {
       // Assert - preview should NOT have hidden attribute
       await expect.element(page.getByTestId("preview")).not.toHaveAttribute("hidden");
     });
+
+    it("maintains consistent height when input is cleared (autoResize)", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize startWithEditMode />);
+      const area = page.getByTestId("area").element();
+      const initialHeight = area.getBoundingClientRect().height;
+
+      // Act - clear the input
+      await page.getByTestId("input").fill("");
+
+      // Assert - height should remain the same
+      const newHeight = area.getBoundingClientRect().height;
+      expect(newHeight).toBe(initialHeight);
+    });
+
+    it("preview contains zero-width space when input is empty (autoResize)", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize startWithEditMode />);
+
+      // Act - clear the input
+      await page.getByTestId("input").fill("");
+
+      // Assert - preview should contain the zero-width space character
+      const preview = page.getByTestId("preview").element();
+      expect(preview.textContent).toBe("\u200B");
+    });
+
+    it("preview does not contain zero-width space when input has content (autoResize)", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize startWithEditMode />);
+
+      // Assert - preview should have the actual content, no zero-width space
+      const preview = page.getByTestId("preview").element();
+      expect(preview.textContent).toBe("Test");
+      expect(preview.textContent).not.toContain("\u200B");
+    });
+
+    it("onChange does not emit zero-width space when submitting empty value", async () => {
+      // Arrange
+      const onChange = vi.fn();
+      await render(
+        <BasicEditable
+          defaultValue="Test"
+          autoResize
+          activationMode="none"
+          submitMode="none"
+          onChange={onChange}
+        />,
+      );
+
+      // Act - enter edit mode, clear input, submit
+      await page.getByTestId("edit-trigger").click();
+      await page.getByTestId("input").fill("");
+      await page.getByTestId("submit-trigger").click();
+
+      // Assert - onChange should receive empty string, not zero-width space
+      expect(onChange).toHaveBeenCalledWith("");
+      expect(onChange).not.toHaveBeenCalledWith("\u200B");
+    });
+
+    it("onSubmit does not emit zero-width space when submitting empty value", async () => {
+      // Arrange
+      const onSubmit = vi.fn();
+      await render(
+        <BasicEditable
+          defaultValue="Test"
+          autoResize
+          activationMode="none"
+          submitMode="none"
+          onSubmit={onSubmit}
+        />,
+      );
+
+      // Act - enter edit mode, clear input, submit
+      await page.getByTestId("edit-trigger").click();
+      await page.getByTestId("input").fill("");
+      await page.getByTestId("submit-trigger").click();
+
+      // Assert - onSubmit should receive empty string, not zero-width space
+      expect(onSubmit).toHaveBeenCalledWith("");
+      expect(onSubmit).not.toHaveBeenCalledWith("\u200B");
+    });
   });
 
   describe("Data attributes", () => {
