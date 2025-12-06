@@ -8,7 +8,7 @@ import { useEditableContext } from "./EditableContext.js";
 export interface EditableAreaProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const EditableArea = forwardRef<HTMLDivElement, EditableAreaProps>(function EditableArea(
-  { ...props },
+  { style, ...props },
   ref,
 ) {
   const ctx = useEditableContext();
@@ -27,6 +27,7 @@ export const EditableArea = forwardRef<HTMLDivElement, EditableAreaProps>(functi
       data-empty={ctx.isEmpty ? "" : undefined}
       data-focus={isActive ? "" : undefined}
       data-focused={isActive ? "" : undefined}
+      style={ctx.autoResize ? { display: "inline-grid", ...style } : style}
       {...props}
     />
   );

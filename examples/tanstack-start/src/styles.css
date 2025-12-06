@@ -71,3 +71,29 @@ body {
 .trigger-cancel {
   @apply hover:bg-red-900/50 hover:text-red-400;
 }
+
+/* Auto Resize Variant */
+.editable-root-inline {
+  @apply inline-block;
+}
+
+.editable-area-autoresize {
+  /* Grid stacking allows preview and input to overlay */
+  @apply rounded;
+}
+
+.editable-area-autoresize[data-focused] {
+  @apply ring-2 ring-amber-500/30;
+}
+
+.editable-preview-autoresize {
+  @apply text-amber-400 font-medium cursor-pointer px-1 rounded hover:bg-amber-500/10 transition-colors;
+}
+
+.editable-preview-autoresize[data-placeholder-shown] {
+  @apply text-stone-600 italic;
+}
+
+.editable-input-autoresize {
+  @apply text-amber-400 font-medium bg-transparent border-none outline-none px-1;
+}
