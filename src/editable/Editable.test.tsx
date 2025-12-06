@@ -719,6 +719,66 @@ describe("Editable", () => {
     });
   });
 
+  describe("autoResize grid layout (Vue parity)", () => {
+    it("EditableArea has display:inline-grid when autoResize is true", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize />);
+
+      // Assert
+      const area = page.getByTestId("area").element();
+      expect(area.style.display).toBe("inline-grid");
+    });
+
+    it("EditableArea has no special style when autoResize is false", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" />);
+
+      // Assert
+      const area = page.getByTestId("area").element();
+      expect(area.style.display).not.toBe("inline-grid");
+    });
+
+    it("EditablePreview uses visibility:hidden (not display:none) when autoResize and editing", async () => {
+      // Arrange - start in edit mode
+      await render(<FocusEditable defaultValue="Test" autoResize startWithEditMode />);
+
+      // Assert - preview should use visibility:hidden, NOT display:none
+      const previewEl = page.getByTestId("preview").element();
+      expect(previewEl.style.visibility).toBe("hidden");
+      expect(previewEl.style.display).not.toBe("none");
+    });
+
+    it("EditablePreview has grid positioning styles when autoResize is true", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize />);
+
+      // Assert - browser normalizes gridArea, "auto / auto" is implicit
+      const preview = page.getByTestId("preview").element();
+      expect(preview.style.gridArea).toMatch(/^1 \/ 1/);
+      expect(preview.style.whiteSpace).toBe("pre");
+      expect(preview.style.userSelect).toBe("none");
+      expect(preview.style.overflow).toBe("hidden");
+      expect(preview.style.textOverflow).toBe("ellipsis");
+    });
+
+    it("EditableInput has grid positioning styles when autoResize is true", async () => {
+      // Arrange
+      await render(<FocusEditable defaultValue="Test" autoResize />);
+
+      // Assert - browser normalizes gridArea
+      const input = page.getByTestId("input").element();
+      expect(input.style.gridArea).toMatch(/^1 \/ 1/);
+    });
+
+    it("EditablePreview not hidden attribute when autoResize is true (uses visibility)", async () => {
+      // Arrange - start in edit mode
+      await render(<FocusEditable defaultValue="Test" autoResize startWithEditMode />);
+
+      // Assert - preview should NOT have hidden attribute
+      await expect.element(page.getByTestId("preview")).not.toHaveAttribute("hidden");
+    });
+  });
+
   describe("Data attributes", () => {
     it("root has data-disabled when disabled", async () => {
       // Arrange

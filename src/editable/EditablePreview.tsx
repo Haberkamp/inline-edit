@@ -14,8 +14,9 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
     const placeholder =
       typeof ctx.placeholder === "string" ? ctx.placeholder : ctx.placeholder?.preview;
 
-    const displayValue = ctx.value ?? "";
-    const showPlaceholder = ctx.isEmpty;
+    // When autoResize + editing, show inputValue so grid sizes correctly
+    const displayValue = ctx.autoResize && ctx.isEditing ? ctx.inputValue || "" : (ctx.value ?? "");
+    const showPlaceholder = ctx.autoResize && ctx.isEditing ? !ctx.inputValue : ctx.isEmpty;
     const hidden = ctx.isEditing;
 
     const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -44,6 +45,22 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
 
     const isInteractive = ctx.activationMode !== "none" && !ctx.disabled && !ctx.readOnly;
 
+    // Vue parity: when autoResize, use grid overlay technique
+    // Preview stays in layout (visibility:hidden) so input can size to it
+    const autoResizeStyles: React.CSSProperties | undefined = ctx.autoResize
+      ? {
+          whiteSpace: "pre",
+          userSelect: "none",
+          gridArea: "1 / 1 / auto / auto",
+          visibility: hidden ? "hidden" : undefined,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }
+      : undefined;
+
+    const hiddenStyles: React.CSSProperties | undefined =
+      !ctx.autoResize && hidden ? { display: "none" } : undefined;
+
     return (
       <span
         ref={ref}
@@ -53,7 +70,8 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
         data-empty={ctx.isEmpty ? "" : undefined}
         style={{
           ...style,
-          ...(hidden ? { display: "none" } : {}),
+          ...autoResizeStyles,
+          ...hiddenStyles,
         }}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}

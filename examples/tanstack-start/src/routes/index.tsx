@@ -255,6 +255,47 @@ function App() {
               </p>
             </div>
           </section>
+
+          {/* Auto Resize */}
+          <section>
+            <h2 className="text-sm font-medium uppercase tracking-widest text-amber-500 mb-6">
+              Auto Resize
+            </h2>
+            <div className="bg-stone-900 border border-stone-800 rounded-lg p-8">
+              <p className="text-stone-400 mb-4">
+                The input automatically grows to match content width using CSS grid overlay:
+              </p>
+              <div className="flex items-center gap-2 text-lg">
+                <span className="text-stone-500">Hello, my name is</span>
+                <EditableRoot
+                  defaultValue="Jane"
+                  autoResize
+                  submitMode="both"
+                  className="editable-root-inline"
+                >
+                  <EditableArea className="editable-area-autoresize">
+                    <EditablePreview className="editable-preview-autoresize" />
+                    <EditableInput className="editable-input-autoresize" />
+                  </EditableArea>
+                </EditableRoot>
+                <span className="text-stone-500">and I like</span>
+                <EditableRoot
+                  defaultValue="coding"
+                  autoResize
+                  submitMode="both"
+                  className="editable-root-inline"
+                >
+                  <EditableArea className="editable-area-autoresize">
+                    <EditablePreview className="editable-preview-autoresize" />
+                    <EditableInput className="editable-input-autoresize" />
+                  </EditableArea>
+                </EditableRoot>
+              </div>
+              <p className="text-sm text-stone-500 mt-4">
+                autoResize=true · Input width matches preview content · Uses CSS grid stacking
+              </p>
+            </div>
+          </section>
         </div>
 
         <footer className="mt-20 pt-8 border-t border-stone-800 text-center text-stone-500 text-sm">

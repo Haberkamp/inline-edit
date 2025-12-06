@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useLayoutEffect, type InputHTMLAttributes } from "react";
+import { forwardRef, useEffect, type InputHTMLAttributes } from "react";
 import { useEditableContext } from "./EditableContext.js";
 
 /**
@@ -41,15 +41,17 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
       }
     }, [ctx.isEditing, ctx.selectOnFocus, ctx.activationSource, ctx.inputRef]);
 
-    // Auto-resize
-    useLayoutEffect(() => {
-      if (!ctx.autoResize) return;
-      const input = ctx.inputRef.current;
-      if (!input) return;
-      input.style.width = "0";
-      input.style.width = `${input.scrollWidth}px`;
-      // eslint-disable-next-line react-hooks/exhaustive-deps -- ref.current is stable
-    }, [ctx.autoResize, ctx.inputValue]);
+    // Vue parity: when autoResize, use grid overlay technique
+    // width: 0 prevents input's intrinsic size from affecting grid column width
+    // (only the preview's content should determine the cell size)
+    const autoResizeStyles: React.CSSProperties | undefined = ctx.autoResize
+      ? {
+          gridArea: "1 / 1 / auto / auto",
+          width: 0,
+          minWidth: "100%",
+          visibility: ctx.isEditing ? undefined : "hidden",
+        }
+      : undefined;
 
     return (
       <input
@@ -65,7 +67,7 @@ export const EditableInput = forwardRef<HTMLInputElement, EditableInputProps>(
         readOnly={ctx.readOnly}
         maxLength={ctx.maxLength}
         hidden={ctx.autoResize ? undefined : !ctx.isEditing || undefined}
-        style={ctx.autoResize ? { visibility: ctx.isEditing ? undefined : "hidden" } : undefined}
+        style={autoResizeStyles}
         data-disabled={ctx.disabled ? "" : undefined}
         data-readonly={ctx.readOnly ? "" : undefined}
         onChange={(e) => ctx.setInputValue(e.target.value)}
