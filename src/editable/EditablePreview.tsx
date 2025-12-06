@@ -15,9 +15,15 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
       typeof ctx.placeholder === "string" ? ctx.placeholder : ctx.placeholder?.preview;
 
     // When autoResize + editing, show inputValue so grid sizes correctly
-    const displayValue = ctx.autoResize && ctx.isEditing ? ctx.inputValue || "" : (ctx.value ?? "");
+    const displayValue = ctx.autoResize && ctx.isEditing ? ctx.inputValue : (ctx.value ?? "");
     const showPlaceholder = ctx.autoResize && ctx.isEditing ? !ctx.inputValue : ctx.isEmpty;
     const hidden = ctx.isEditing;
+
+    // Zero-width space prevents layout collapse when content is empty (autoResize only)
+    const ZWSP = "\u200B";
+    const contentToRender = showPlaceholder
+      ? placeholder || (ctx.autoResize ? ZWSP : undefined)
+      : displayValue || (ctx.autoResize ? ZWSP : undefined);
 
     const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
       if (ctx.activationMode === "focus" && !ctx.disabled && !ctx.readOnly) {
@@ -78,7 +84,7 @@ export const EditablePreview = forwardRef<HTMLSpanElement, EditablePreviewProps>
         onKeyDown={handleKeyDown}
         {...props}
       >
-        {showPlaceholder ? placeholder : displayValue}
+        {contentToRender}
       </span>
     );
   },
